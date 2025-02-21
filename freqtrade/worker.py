@@ -6,7 +6,8 @@ import logging
 import time
 import traceback
 from collections.abc import Callable
-from os import getpid
+
+# from os import getpid
 from typing import Any
 
 import sdnotify
@@ -131,9 +132,9 @@ class Worker:
                 strategy_version = self.freqtrade.strategy.version()
                 if strategy_version is not None:
                     version += ", strategy_version: " + strategy_version
-                logger.info(
-                    f"Bot heartbeat. PID={getpid()}, version='{version}', state='{state.name}'"
-                )
+                # logger.info(
+                #     f"Bot heartbeat. PID={getpid()}, version='{version}', state='{state.name}'"
+                # )
                 self._heartbeat_msg = now
 
         return state
