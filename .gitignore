@@ -4,8 +4,10 @@ config*.json
 *.sqlite-shm
 *.sqlite-wal
 logfile.txt
-user_data/*
+# user_data/*
 !user_data/strategy/sample_strategy.py
+user_data/backtest_results/*
+user_data/hyperopts/*
 !user_data/notebooks
 !user_data/models
 !user_data/freqaimodels
@@ -16,6 +18,7 @@ freqtrade-plot.html
 freqtrade-profit-plot.html
 freqtrade/rpc/api_server/ui/*
 build_helpers/ta-lib/*
+user_data/data/binance/*
 
 # Macos related
 .DS_Store
@@ -103,7 +106,7 @@ target/
 .env
 .venv
 .idea
-.vscode
+# .vscode
 
 .pytest_cache/
 .mypy_cache/
@@ -116,3 +119,10 @@ target/
 !config_examples/config_freqai.example.json
 
 docker-compose-*.yml
+
+envvar.txt
+
+.terraform.lock.hcl
+.terraform/
+terraform.tfstate.d/
+key-nachito*

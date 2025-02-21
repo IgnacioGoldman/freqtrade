@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "sample_strategy",
+            "justMyCode": false,
+            "type": "debugpy",
+            "request": "launch",
+            "module": "freqtrade",
+            "python": "/Users/ignaciogoldman/Desktop/Projects/fork-freqtrade/freqtrade/.venv/bin/python3.12",
+            "console": "integratedTerminal",
+            "args": [
+                "trade",
+                "--strategy",
+                "SampleStrategy",
+                "--config",
+                "user_data/config.json"
+            ]
+        }
+    ]
+}
