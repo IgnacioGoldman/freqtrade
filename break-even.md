@@ -1,10 +1,17 @@
 # Break-Even Strategy
 
+## Requirements
+
+- Python 3.10 or higher
+ 
 ## Get Started
 
 1. Install freqtrade from scratch
 
 ```
+git clone https://github.com/IgnacioGoldman/freqtrade.git
+cd freqtrade/
+sudo chmod +x setup.sh
 ./setup.sh -i
 ```
 
