@@ -107,8 +107,69 @@ freqtrade plot-dataframe --timerange="20250101-20250201" --config=user_data/conf
 
 ## Run in prod
 
+1. Initialize terraform
+
 terraform init
+
+2. Create workspace
 
 terraform workspace new $TF_VAR_project_name
 
+3. Create key
+
 ssh-keygen -t rsa -f key-$TF_VAR_project_name -q -P ""
+
+4. build resources in aws
+
+terraform apply
+
+5. access vm
+
+6. Install python 3.10
+
+sudo apt update
+sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
+    libnss3-dev libssl-dev libreadline-dev libffi-dev curl libsqlite3-dev
+
+cd /usr/src
+sudo curl -O https://www.python.org/ftp/python/3.10.12/Python-3.10.12.tgz
+sudo tar -xf Python-3.10.12.tgz
+cd Python-3.10.12
+sudo ./configure --enable-optimizations
+sudo make -j $(nproc)
+sudo make altinstall
+
+7. verify python
+
+python3.10 --version
+
+8. Install docker / docker compose
+
+sudo apt-get update -y
+sudo apt-get install \
+ca-certificates \
+curl \
+gnupg \
+lsb-release -y
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update -y
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+sudo apt install docker-compose -y
+
+9. switch to root
+
+sudo su
+
+10. Create new directory and save docker compose file there, download freqtrade docker image
+
+mkdir ft_userdata
+cd ft_userdata/
+# Download the docker-compose file from the repository
+curl https://raw.githubusercontent.com/freqtrade/freqtrade/stable/docker-compose.yml -o docker-compose.yml
+
+# Pull the freqtrade image
+docker compose pull
