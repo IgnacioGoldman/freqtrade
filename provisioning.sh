@@ -1,31 +1,5 @@
 #!/bin/bash
 
-# && sudo chmod +x setup.sh && ./setup.sh -i
-
-# 2. Activate virtual environment
-
-# ```
-# source ./.venv/bin/activate
-# ```
-
-##
-# Python
-##
-sudo apt update
-sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
-    libnss3-dev libssl-dev libreadline-dev libffi-dev curl libsqlite3-dev
-
-cd /usr/src
-sudo curl -O https://www.python.org/ftp/python/3.10.12/Python-3.10.12.tgz
-sudo tar -xf Python-3.10.12.tgz
-cd Python-3.10.12
-sudo ./configure --enable-optimizations
-sudo make -j $(nproc)
-sudo make altinstall
-
-alias python3 = python3.10
-alias python = python3
-
 ##
 # Docker & Docker compose
 ##
