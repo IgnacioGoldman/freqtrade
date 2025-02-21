@@ -133,12 +133,12 @@ class SampleStrategy(IStrategy):
                 "supply_zone_0_entry_0.005_30_4h": {"color": "orange"},
                 "supply_zone_0_sl_0.005_30_4h": {"color": "orange"},
                 "supply_zone_0_ob_high_0.005_30_4h": {"color": "orange"},
-                "demand_zone_0_entry_0.005_30_15m": {"color": "yellow"},
-                "demand_zone_0_sl_0.005_30_15m": {"color": "yellow"},
-                "demand_zone_0_ob_low_0.005_30_15m": {"color": "yellow"},
-                "demand_zone_0_entry_0.005_30_4h": {"color": "orange"},
-                "demand_zone_0_sl_0.005_30_4h": {"color": "orange"},
-                "demand_zone_0_ob_low_0.005_30_4h": {"color": "orange"},
+                # "demand_zone_0_entry_0.005_30_15m": {"color": "yellow"},
+                # "demand_zone_0_sl_0.005_30_15m": {"color": "yellow"},
+                # "demand_zone_0_ob_low_0.005_30_15m": {"color": "yellow"},
+                # "demand_zone_0_entry_0.005_30_4h": {"color": "orange"},
+                # "demand_zone_0_sl_0.005_30_4h": {"color": "orange"},
+                # "demand_zone_0_ob_low_0.005_30_4h": {"color": "orange"},
             }
             # "subplots": {
             #     "highF_meet_conditions": {
