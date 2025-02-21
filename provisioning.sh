@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# && sudo chmod +x setup.sh && ./setup.sh -i
+
+# 2. Activate virtual environment
+
+# ```
+# source ./.venv/bin/activate
+# ```
+
 ##
 # Python
 ##

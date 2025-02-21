@@ -359,7 +359,7 @@ class SampleStrategy(IStrategy):
         df_nonzero = df_nonzero[df_nonzero[f"price_change_{timeframe}"] != 0]
 
         # Select the last 200 candlesticks
-        last_200_candles = df_nonzero["price_change_15m"].iloc[-200:]
+        last_200_candles = df_nonzero[f"price_change_{timeframe}"].iloc[-200:]
         # Calculate the 95th percentile
         percentile_95 = last_200_candles.quantile(0.95)
         return percentile_95

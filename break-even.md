@@ -109,67 +109,55 @@ freqtrade plot-dataframe --timerange="20250101-20250201" --config=user_data/conf
 
 1. Initialize terraform
 
+```
 terraform init
+```
 
 2. Create workspace
 
+```
 terraform workspace new $TF_VAR_project_name
+```
 
 3. Create key
 
+```
 ssh-keygen -t rsa -f key-$TF_VAR_project_name -q -P ""
+```
 
 4. build resources in aws
 
+```
 terraform apply
+```
 
-5. access vm
+5. SSH into the VM, and give permissions:
 
-6. Install python 3.10
+```
+sudo chown -R $(whoami) .
+```
 
-sudo apt update
-sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
-    libnss3-dev libssl-dev libreadline-dev libffi-dev curl libsqlite3-dev
+6. Run provisioning script
 
-cd /usr/src
-sudo curl -O https://www.python.org/ftp/python/3.10.12/Python-3.10.12.tgz
-sudo tar -xf Python-3.10.12.tgz
-cd Python-3.10.12
-sudo ./configure --enable-optimizations
-sudo make -j $(nproc)
-sudo make altinstall
+```
+git clone https://github.com/IgnacioGoldman/freqtrade.git && cd freqtrade/ 
+sudo chmod +x ./provisioning.sh && ./provisioning.sh
+```
 
-7. verify python
+7. switch to root
 
-python3.10 --version
-
-8. Install docker / docker compose
-
-sudo apt-get update -y
-sudo apt-get install \
-ca-certificates \
-curl \
-gnupg \
-lsb-release -y
-sudo mkdir -m 0755 -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update -y
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-sudo apt install docker-compose -y
-
-9. switch to root
-
+```
 sudo su
+```
 
-10. Create new directory and save docker compose file there, download freqtrade docker image
+8. download freqtrade image
 
-mkdir ft_userdata
-cd ft_userdata/
-# Download the docker-compose file from the repository
-curl https://raw.githubusercontent.com/freqtrade/freqtrade/stable/docker-compose.yml -o docker-compose.yml
-
-# Pull the freqtrade image
+```
 docker compose pull
+```
+
+10. run freqtrade
+
+```
+docker compose up -d
+```
