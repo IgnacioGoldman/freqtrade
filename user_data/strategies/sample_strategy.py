@@ -405,14 +405,10 @@ class SampleStrategy(IStrategy):
 
         enter_tag = trade.enter_tag  # Retrieve entry tag
 
-        logger.info(f"Checking exit condition for {enter_tag}")
+        logger.info(f"[EXIT] Checking exit condition for {enter_tag}")
         if enter_tag == "highF":
-            logger.info("Found a highF trade...")
             logger.info(
-                f"Current profit is {current_profit}, price change percentual last candlesticks is {percentile_95_15m}"
-            )
-            logger.info(
-                f"Are we in resistance zone? {dataframe['in_demand_zone_amplitude_0.005_30_15m'].iloc[-1]}"
+                f"[EXIT] highF: current_profit ({current_profit}) must be higher than {percentile_95_15m}"
             )
             if (
                 (
@@ -424,36 +420,56 @@ class SampleStrategy(IStrategy):
                 )
                 and (current_profit > 0)
             ):  # AND profit is positive
+                logger.info("[EXIT] exiting highF...")
                 return "highF_exit"
-        elif enter_tag == "lowF1":
+            else:
+                return None
+        # lowF1 reason of exit depends on highF. highF must exist for lowF1 to get cancelled
+        elif enter_tag == "lowF1" and highF:
             # if lowF1 at 80000, highF at 100000, denominator at 900000
             # if current_rate at 90500
             # proximity 1.005-1=0.005
-            logger.info("Found a lowF1 trade...")
-            logger.info(f"proximity of {proximity}, must be higher than 0 to close both trades")
             proximity = (current_rate / ((lowF1.open_rate + highF.open_rate) / 2)) - 1
+            logger.info(
+                f"[EXIT] lowF1: proximity of {proximity}, must be higher than 0 to close both trades"
+            )
             if proximity > 0:
+                logger.info("[EXIT] forcing trade highF, exiting lowF1...")
                 # forces to close highF
                 self.force_trade(highF)
                 # closes lowF1
                 return "lowF1_exit"
+            else:
+                return None
         elif enter_tag == "lowF2":
             if highF:
                 proximity = (current_rate / ((lowF2.open_rate + highF.open_rate) / 2)) - 1
+                logger.info(
+                    f"[EXIT] lowF2: proximity of {proximity}, must be higher than 0 to close both trades (LowF2 & highF)"
+                )
                 if proximity > 0:
+                    logger.info("[EXIT] forcing trade highF, exiting lowF2...")
                     # forces to close highF
                     self.force_trade(highF)
                     # closes lowF2
                     return "lowF2_exit"
+                else:
+                    return None
             if lowF1:
                 proximity = (current_rate / ((lowF2.open_rate + lowF1.open_rate) / 2)) - 1
+                logger.info(
+                    f"[EXIT] lowF2: proximity of {proximity}, must be higher than 0 to close both trades (LowF2 & LowF1)"
+                )
                 if proximity > 0:
+                    logger.info("[EXIT] forcing trade lowF1, exiting lowF2...")
                     # forces to close highF
                     self.force_trade(lowF1)
                     # closes lowF2
                     return "lowF2_exit"
-
-            return "lowF2_exit"
+                else:
+                    return None
+            else:
+                return None
         else:
             return None
 
