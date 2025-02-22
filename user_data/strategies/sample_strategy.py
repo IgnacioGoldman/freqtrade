@@ -361,9 +361,7 @@ class SampleStrategy(IStrategy):
         df_nonzero = dataframe.copy()
 
         # Calculate pct_change for all candlesticks, as we are at 1m timeframe many of them will be zero
-        df_nonzero[f"price_change_{timeframe}"] = (
-            df_nonzero[f"close_{timeframe}"].pct_change() * 100
-        )
+        df_nonzero[f"price_change_{timeframe}"] = df_nonzero[f"close_{timeframe}"].pct_change()
 
         # remove zero values
         df_nonzero = df_nonzero[df_nonzero[f"price_change_{timeframe}"] != 0]
