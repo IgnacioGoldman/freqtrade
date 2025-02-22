@@ -297,7 +297,7 @@ class SampleStrategy(IStrategy):
                     f"[ENTRY] lowF1 exist at {lowF1.open_rate} while trying to open highF at {dataframe['close'].iloc[-1]}"
                 )
                 # lowF1 open rate must be smaller than the current potential open price
-                if (1 - (dataframe["close"] > lowF1.open_rate)) > 0.03:
+                if (1 - (dataframe["close"] > lowF1.open_rate)) > 0.01:
                     logger.info(
                         "[ENTRY] lowF1 exist and it is 0,03 lower than highF, opening highF trade..."
                     )
@@ -315,7 +315,7 @@ class SampleStrategy(IStrategy):
                 f"[ENTRY] highF exist at {highF.open_rate} while trying to open lowF1 at {dataframe['close'].iloc[-1]}"
             )
             # away from highF rate
-            if (1 - (dataframe["close"] / highF.open_rate)) > 0.03:
+            if (1 - (dataframe["close"] / highF.open_rate)) > 0.01:
                 logger.info("[ENTRY] opening lowF1 trade...")
                 dataframe["lowF1_meet_conditions"] = 1
         ##
@@ -326,7 +326,7 @@ class SampleStrategy(IStrategy):
                 f"[ENTRY] lowF1 exist at {lowF1.open_rate} while trying to open lowF2 at {dataframe['close'].iloc[-1]}"
             )
             # away from lowF1 rate
-            if (1 - (dataframe["close"] / lowF1.open_rate)) > 0.03:
+            if (1 - (dataframe["close"] / lowF1.open_rate)) > 0.01:
                 logger.info("[ENTRY] opening lowF2 trade...")
                 dataframe["lowF2_meet_conditions"] = 1
 
