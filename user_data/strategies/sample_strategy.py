@@ -294,7 +294,7 @@ class SampleStrategy(IStrategy):
             # if lowF1 exists
             if lowF1:
                 logger.info(
-                    f"lowF1 exist at ${lowF1.open_rate} while trying to close highF at ${dataframe['close'].iloc[-1]}"
+                    f"lowF1 exist at {lowF1.open_rate} while trying to close highF at {dataframe['close'].iloc[-1]}"
                 )
                 # lowF1 open rate must be smaller than the current potential open price
                 if (1 - (dataframe["close"] > lowF1.open_rate)) > 0.03:
@@ -395,14 +395,14 @@ class SampleStrategy(IStrategy):
 
         enter_tag = trade.enter_tag  # Retrieve entry tag
 
-        logger.info(f"Checking exit condition for ${enter_tag}")
+        logger.info(f"Checking exit condition for {enter_tag}")
         if enter_tag == "highF":
             logger.info("Found a highF trade...")
             logger.info(
-                f"Current profit is ${current_profit}, price change percentual last candlesticks is ${percentile_95_15m}"
+                f"Current profit is {current_profit}, price change percentual last candlesticks is {percentile_95_15m}"
             )
             logger.info(
-                f"Are we in resistance zone? ${dataframe['in_demand_zone_amplitude_0.005_30_15m'].iloc[-1]}"
+                f"Are we in resistance zone? {dataframe['in_demand_zone_amplitude_0.005_30_15m'].iloc[-1]}"
             )
             if (
                 (
