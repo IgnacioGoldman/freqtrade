@@ -95,7 +95,7 @@ class SampleStrategy(IStrategy):
     ignore_roi_if_entry_signal = False
 
     zone_amplitude = CategoricalParameter(
-        [0.005, 0.01, 0.015, 0.02, 0.03], default=0.005, optimize=True, space="buy"
+        [0.005, 0.01, 0.015, 0.02], default=0.005, optimize=True, space="buy"
     )
     space_for_finding_extrema = CategoricalParameter(
         [5, 10, 20, 30], default=30, optimize=False, space="buy"
@@ -139,12 +139,8 @@ class SampleStrategy(IStrategy):
                 # "demand_zone_0_entry_0.005_30_4h": {"color": "orange"},
                 # "demand_zone_0_sl_0.005_30_4h": {"color": "orange"},
                 # "demand_zone_0_ob_low_0.005_30_4h": {"color": "orange"},
-            }
-            # "subplots": {
-            #     "highF_meet_conditions": {
-            #         'highF_meet_conditions': {'color': 'black'}
-            #     }
-            # }
+            },
+            "subplots": {"highF": {"highF": {"color": "black"}}},
         }
 
     def informative_pairs(self):
@@ -280,27 +276,34 @@ class SampleStrategy(IStrategy):
         support_zone_15m = dataframe[
             f"in_supply_zone_amplitude_{self.zone_amplitude.value}_{self.space_for_finding_extrema.value}_15m"
         ].iloc[-1]
-        logger.info(f"are we in 15m support zone? {support_zone_15m}")
         support_zone_4h = dataframe[
             f"in_supply_zone_amplitude_{self.zone_amplitude.value}_{self.space_for_finding_extrema.value}_4h"
         ].iloc[-1]
-        logger.info(f"are we in support zone? {support_zone_4h}")
+
+        logger.info(f"[ENTRY] highF: {highF} | lowF1: {lowF1} | lowF2: {lowF2}")
+        logger.info(
+            f"[ENTRY] 15m support zone: {support_zone_15m} | 4h support zone: {support_zone_4h}"
+        )
+
         ##
         # Meet conditions for highF
         ##
         # does not exist a highF yet
         if (not highF) and support_zone_15m:
-            logger.info("highF does not exist")
+            logger.info("[ENTRY] highF does not exist. What about lowF1?")
             # if lowF1 exists
             if lowF1:
                 logger.info(
-                    f"lowF1 exist at {lowF1.open_rate} while trying to close highF at {dataframe['close'].iloc[-1]}"
+                    f"[ENTRY] lowF1 exist at {lowF1.open_rate} while trying to open highF at {dataframe['close'].iloc[-1]}"
                 )
                 # lowF1 open rate must be smaller than the current potential open price
                 if (1 - (dataframe["close"] > lowF1.open_rate)) > 0.03:
+                    logger.info(
+                        "[ENTRY] lowF1 exist and it is 0,03 lower than highF, opening highF trade..."
+                    )
                     dataframe["highF_meet_conditions"] = 1
             else:
-                logger.info("lowF1 does not exist")
+                logger.info("[ENTRY] lowF1 does not exist, opening highF trade...")
                 # if lowF1 does not exist, nothing to check
                 dataframe["highF_meet_conditions"] = 1
         ##
@@ -308,16 +311,23 @@ class SampleStrategy(IStrategy):
         ##
         # highF need to exist, not a lowF1 and touching 4h support
         elif (highF) and (not lowF1) and support_zone_4h:
+            logger.info(
+                f"[ENTRY] highF exist at {highF.open_rate} while trying to open lowF1 at {dataframe['close'].iloc[-1]}"
+            )
             # away from highF rate
             if (1 - (dataframe["close"] / highF.open_rate)) > 0.03:
+                logger.info("[ENTRY] opening lowF1 trade...")
                 dataframe["lowF1_meet_conditions"] = 1
         ##
         # Meet conditions for lowF2
         ##
-        # We need to have other 2 trades open already
         elif (lowF1) and (not lowF2) and support_zone_4h:
+            logger.info(
+                f"[ENTRY] lowF1 exist at {lowF1.open_rate} while trying to open lowF2 at {dataframe['close'].iloc[-1]}"
+            )
             # away from lowF1 rate
             if (1 - (dataframe["close"] / lowF1.open_rate)) > 0.03:
+                logger.info("[ENTRY] opening lowF2 trade...")
                 dataframe["lowF2_meet_conditions"] = 1
 
         return dataframe

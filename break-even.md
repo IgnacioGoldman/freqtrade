@@ -24,7 +24,7 @@ source ./.venv/bin/activate
 3. Start strategy
 
 ```
-freqtrade trade --config user_data/config.json --strategy SampleStrategy
+freqtrade trade --config user_data/local.json --strategy SampleStrategy
 ```
 
 ## What does Break-Even means?
