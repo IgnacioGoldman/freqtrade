@@ -416,7 +416,7 @@ class SampleStrategy(IStrategy):
                         -1
                     ]  # touching a resistance
                 )
-                and (current_profit > 0)
+                and (current_profit > 0.005)
             ):  # AND profit is positive
                 logger.info("[EXIT] exiting highF...")
                 return "highF_exit"
@@ -431,7 +431,7 @@ class SampleStrategy(IStrategy):
             logger.info(
                 f"[EXIT] lowF1: proximity of {proximity}, must be higher than 0 to close both trades"
             )
-            if proximity > 0:
+            if proximity > 0.001:
                 logger.info("[EXIT] forcing trade highF, exiting lowF1...")
                 # forces to close highF
                 self.force_trade(highF)
@@ -445,7 +445,7 @@ class SampleStrategy(IStrategy):
                 logger.info(
                     f"[EXIT] lowF2: proximity of {proximity}, must be higher than 0 to close both trades (LowF2 & highF)"
                 )
-                if proximity > 0:
+                if proximity > 0.001:
                     logger.info("[EXIT] forcing trade highF, exiting lowF2...")
                     # forces to close highF
                     self.force_trade(highF)
@@ -458,9 +458,9 @@ class SampleStrategy(IStrategy):
                 logger.info(
                     f"[EXIT] lowF2: proximity of {proximity}, must be higher than 0 to close both trades (LowF2 & LowF1)"
                 )
-                if proximity > 0:
+                if proximity > 0.001:
                     logger.info("[EXIT] forcing trade lowF1, exiting lowF2...")
-                    # forces to close highF
+                    # forces to close lowF1
                     self.force_trade(lowF1)
                     # closes lowF2
                     return "lowF2_exit"
